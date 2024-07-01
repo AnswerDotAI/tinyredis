@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tinyredis"
+version = "0.0.1"
+description = "Minimalist API for redis"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Jeremy Howard", email = "info@fast.ai" }
+]
+requires-python = ">=3.7, <4"
+dependencies = [ "fastcore", "redis" ]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/AnswerDotAI/tinyredis"
+
