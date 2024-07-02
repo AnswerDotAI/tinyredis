@@ -21,19 +21,25 @@ class TinyRedis:
         print(d.get('id',None))
         self.r.set(self.to_id(d['id']), dumps(d))
         return self.typ(**d)
-    
+
+    def insert_all(self, objs):
+        pipe = self.r.pipeline()
+        for o in objs: pipe.set(self.to_id(o.id), dumps(asdict(o)))
+        pipe.execute()
+        return tuple(objs)
+
     def update(self, o=None, d=None, **kw):
         d = self._xpand(d, o, kw)
         d = {**self.get(d['id']), **d}
         self.r.set(self.to_id(d['id']), dumps(d))
         return self.typ(**d)
-    
+
     def delete(self, id): self.r.delete(self.to_id(id))
-    
+
     def to_obj(self, j): return self.typ(**loads(j))
     def get(self, k): return loads(self.r.get(self.to_id(k)))
     def __getitem__(self, k): return self.typ(**self.get(k))
-    
+
     def __call__(self):
         keys = self.r.scan_iter(match=f'{self.nm}:*', count=10000)
         return [self.to_obj(o) for o in self.r.mget(keys)]
